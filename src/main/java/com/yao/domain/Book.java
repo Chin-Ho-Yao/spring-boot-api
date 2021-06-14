@@ -1,8 +1,12 @@
 package com.yao.domain;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by Jack Yao on 2021/6/11 10:08 下午
@@ -12,9 +16,9 @@ public class Book {
     @Id
     @GeneratedValue
     private Long id;
-    private String name;
     private String author;
     private String description;
+    private String name;
     private Integer status;
 
     public Book() {

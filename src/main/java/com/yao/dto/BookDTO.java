@@ -2,7 +2,11 @@ package com.yao.dto;
 
 import com.yao.domain.Book;
 import com.yao.util.CustomBeanUtils;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.BeanUtils;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by Jack Yao on 2021/6/14 10:53 上午
@@ -10,9 +14,14 @@ import org.springframework.beans.BeanUtils;
 /*把data轉換成object*/
 
 public class BookDTO {
-    private String name;
+
+    @Length(min = 3)
     private String author;
+    @Length(max = 20)
     private String description;
+    @NotBlank
+    private String name;
+    @NotNull
     private Integer status;
 
     public BookDTO() {
@@ -53,6 +62,9 @@ public class BookDTO {
     public void convertToBook(Book book) {
         new BookConvert().convert(this,book);
     }
+    public Book convertToBook() {
+        return new BookConvert().convert(this);
+    }
 
     public class BookConvert implements Convert<BookDTO, Book> {
         /*空直不複製，這不能只能空直，但是可以指定要傳哪些。不傳的丟在該陣列nullPropertyNames就好*/
@@ -66,7 +78,9 @@ public class BookDTO {
 
         @Override
         public Book convert(BookDTO bookDTO) {
-            return null;
+            Book book = new Book();
+            BeanUtils.copyProperties(bookDTO, book);
+            return book;
         }
     }
 }

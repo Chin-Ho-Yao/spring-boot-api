@@ -2,6 +2,8 @@ package com.yao.api;
 
 import com.yao.domain.Book;
 import com.yao.dto.BookDTO;
+import com.yao.exception.InvalidRequestException;
+import com.yao.exception.NotFoundException;
 import com.yao.service.BookService;
 import com.yao.util.CustomBeanUtils;
 import org.springframework.beans.BeanUtils;
@@ -11,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BatchUpdateUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +34,9 @@ public class BookApi {
     @GetMapping("/books")
     public ResponseEntity<?> listAllBooks(){
         List<Book> books = bookService.findAllBooks();
+        if (books.isEmpty()){
+            throw new NotFoundException("書單列表不存在");
+        }
         /*封裝到RE裡面，請求成功返回200的狀態*/
         return new ResponseEntity<List<Book>>(books, HttpStatus.OK);
     }
@@ -38,20 +45,35 @@ public class BookApi {
     @GetMapping("/books/{id}")
     public ResponseEntity<?> getBook(@PathVariable Long id){
         Book book = bookService.getBookById(id);
+        if (book == null){
+            throw new NotFoundException(String.format("book by id %s not found",id));
+        }
         /*封裝到RE裡面，請求成功返回200的狀態*/
         return new ResponseEntity<Object>(book, HttpStatus.OK);
     }
 
     /*新增書單，201(Created)*/
     @PostMapping("/books")
-    public ResponseEntity<?> saveBook(@RequestBody Book book){
-        Book book1 = bookService.saveBook(book);
+    public ResponseEntity<?> saveBook(@Valid @RequestBody BookDTO bookDTO, BindingResult bindingResult){
+        /*先驗證有無錯誤*/
+
+        if (bindingResult.hasErrors()){
+            /*bindingResult將驗證失敗傳遞過去*/
+            throw new InvalidRequestException("Invalid parameter",bindingResult);
+        }/*驗證失敗就不會再往下走了*/
+
+        Book book1 = bookService.saveBook(bookDTO.convertToBook());
         return new ResponseEntity<Object>(book1, HttpStatus.CREATED);
     }
 
     /*更新書單*/
     @PutMapping("/books/{id}")
-    public ResponseEntity<?> updateBook(@PathVariable Long id, @RequestBody BookDTO bookDTO){
+    public ResponseEntity<?> updateBook(@Valid @PathVariable Long id,@Valid @RequestBody BookDTO bookDTO, BindingResult bindingResult){
+        /*先驗證有無錯誤*/
+        if (bindingResult.hasErrors()){
+            /*bindingResult將驗證失敗傳遞過去*/
+            throw new InvalidRequestException("Invalid parameter",bindingResult);
+        }
         Book currentBook = bookService.getBookById(id);
         bookDTO.convertToBook(currentBook);
         Book book1 = bookService.updateBook(currentBook);
