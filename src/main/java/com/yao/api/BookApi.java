@@ -1,14 +1,20 @@
 package com.yao.api;
 
 import com.yao.domain.Book;
+import com.yao.dto.BookDTO;
 import com.yao.service.BookService;
+import com.yao.util.CustomBeanUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BatchUpdateUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.beans.PropertyDescriptor;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,21 +44,22 @@ public class BookApi {
 
     /*新增書單，201(Created)*/
     @PostMapping("/books")
-    public ResponseEntity<?> saveBook(Book book){
+    public ResponseEntity<?> saveBook(@RequestBody Book book){
         Book book1 = bookService.saveBook(book);
         return new ResponseEntity<Object>(book1, HttpStatus.CREATED);
     }
 
     /*更新書單*/
     @PutMapping("/books/{id}")
-    public ResponseEntity<?> updateBook(@PathVariable Long id, Book book){
+    public ResponseEntity<?> updateBook(@PathVariable Long id, @RequestBody BookDTO bookDTO){
         Book currentBook = bookService.getBookById(id);
-        /*複製屬性，右邊複製給左邊*/
-        BeanUtils.copyProperties(book, currentBook);
+        bookDTO.convertToBook(currentBook);
         Book book1 = bookService.updateBook(currentBook);
         return new ResponseEntity<Object>(book1, HttpStatus.OK);
 
     }
+
+
 
     /*刪除一個書單*/
     @DeleteMapping("/books/{id}")
