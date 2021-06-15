@@ -22,6 +22,7 @@ public class LogTestApi {
         logger.warn("warn --- log");
         logger.error("error --- log");
         logger.debug("debug --- log");
+        logger.trace("trace --- log");
         logger.info("name:{},email:{}", name, email);
         return "logtest";
     }

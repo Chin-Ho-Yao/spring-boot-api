@@ -16,4 +16,5 @@ public class InvalidRequestException extends RuntimeException{
     public Errors getErrors() {
         return errors;
     }
+
 }
