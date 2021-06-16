@@ -3,3 +3,8 @@ logging:
   level:
     root: debug
     com.yao: debug
+  file: devlog/my.log
+#  file: /Users/yaochinho/暫存區/my.log
+#  path: /Users/yaochinho/暫存區/devlog
+
+
