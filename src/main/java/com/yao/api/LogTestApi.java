@@ -18,6 +18,7 @@ public class LogTestApi {
     public String log(){
         String name = "zhang";
         String email = "hell@163.com";
+        int i = 4/0;
         logger.info("------------- log---------------");
 //        logger.warn("warn --- log");
 //        logger.error("error --- log");
