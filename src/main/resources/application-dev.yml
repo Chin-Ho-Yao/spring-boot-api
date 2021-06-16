@@ -4,7 +4,11 @@ logging:
     root: debug
     com.yao: debug
   file: devlog/my.log
+  pattern:
+#    console: '%d{HH:mm:ss.SSS}'
+
+
+#  config: classpath:logback-text.xml
 #  file: /Users/yaochinho/暫存區/my.log
 #  path: /Users/yaochinho/暫存區/devlog
-
 
