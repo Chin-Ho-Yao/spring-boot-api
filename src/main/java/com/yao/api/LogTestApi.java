@@ -18,12 +18,12 @@ public class LogTestApi {
     public String log(){
         String name = "zhang";
         String email = "hell@163.com";
-        logger.info("info --- log");
-        logger.warn("warn --- log");
-        logger.error("error --- log");
-        logger.debug("debug --- log");
-        logger.trace("trace --- log");
-        logger.info("name:{},email:{}", name, email);
+        logger.info("------------- log---------------");
+//        logger.warn("warn --- log");
+//        logger.error("error --- log");
+//        logger.debug("debug --- log");
+//        logger.trace("trace --- log");
+//        logger.info("name:{},email:{}", name, email);
         return "logtest";
     }
 }

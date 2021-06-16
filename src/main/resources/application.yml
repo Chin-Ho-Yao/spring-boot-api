@@ -2,7 +2,7 @@ spring:
   thymeleaf:
     mode: HTML
   profiles:
-    active: develop
+    active: dev
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/book?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
@@ -12,5 +12,5 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-logging:
-  config: classpath:logback-custom.xml
+#logging:
+#  config: classpath:logback-custom.xml

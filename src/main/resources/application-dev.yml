@@ -1,7 +1,7 @@
 
 logging:
   level:
-    root: debug
+    root: info
     com.yao: debug
   file: devlog/my.log
   pattern:
